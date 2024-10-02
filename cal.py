@@ -24,7 +24,7 @@ class Calculator():
         if opstr.isdigit(): isDigit = True 
         res = [(op, opstr)]
         res.append((~op, "~{}".format(opstr) if isDigit else "~({})".format(opstr)))
-        if 0 <= op < 7: res.append((~op, "{}!".format(opstr) if isDigit else "({})!".format(opstr)))
+        if 0 <= op < 7: res.append((self.factorialTable[op], "{}!".format(opstr) if isDigit else "({})!".format(opstr)))
         return res
     
     def bin_derive(self, op1, op1str, op2, op2str):
@@ -83,10 +83,11 @@ class Calculator():
                                 res.extend(self.bin_derive(op1d, op1strd, op2d, op2strd))
             if len(stk) == 4:
                 for v, s in res:
-                    if v == FINAL_GOAL: 
-                        print(s)
-                        exit()
-                        self.res.append(s)
+                    for vd, sd in self.unary_derive(v, s):
+                        if vd == FINAL_GOAL: 
+                            print(sd)
+                            exit()
+                            self.res.append(sd)
             return res
 
     def eval(self, nums:List[int]) -> Optional[List[str]]:
